@@ -17,7 +17,6 @@ node_e = Node('e')
             b     c
              \   /
               d e
-中序遍历结果应为 bdaec
 '''
 node_a.left = node_b
 node_a.right = node_c
@@ -59,18 +58,19 @@ def postOrderTraversal(tree):
         while T:
             stack.append(T)
             T = T.left
-        if stack:
-            temp_node = stack.pop()    # 把左子树为空的节点弹出来，当右子树也为空时访问它，否则还要放回栈
-            if temp_node.right and temp_node.right != P:
-                stack.append(temp_node)
-                T = temp_node.right
-            else:
-                if not stack or stack[-1].right != P:     # 当栈为空，即弹出前只剩一个节点或弹出后栈顶的节点不等于上一次访问的节点时
-                    print('%-4c' % temp_node.val, end='')
-                    T = None
-                    P = temp_node
+        temp_node = stack.pop()    # 把左子树为空的节点弹出来，当右子树也为空时访问它，否则还要放回栈
+        if temp_node.right and temp_node.right != P:
+            stack.append(temp_node)
+            T = temp_node.right
+        else:
+            if not stack:       # 当栈为空，即弹出前只剩一个节点，该节点真的出栈，需访问该节点
+                print('%-4c' % temp_node.val, end='')
+            elif stack[-1].right != P:     # 当弹出后栈顶的节点不等于上一次访问的节点时，该节点真的出栈，需访问该节点
+                print('%-4c' % temp_node.val, end='')
+                T = None
+                P = temp_node
     print()
 
-inOrderTraversal(node_a)
-preOrderTraversal(node_a)
-postOrderTraversal(node_a)
+inOrderTraversal(node_a)           # b   d   a   e   c
+preOrderTraversal(node_a)          # a   b   d   c   e
+postOrderTraversal(node_a)         # d   b   e   c   a
